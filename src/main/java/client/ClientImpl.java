@@ -24,7 +24,9 @@ public class ClientImpl implements ClientAPI {
 
             scanner = new Scanner(System.in);
             Logger.info("Sending method from keyboard");
-            out.writeInt(scanner.nextInt());
+            out.writeInt(1);
+
+            out.writeUTF("zabelko 123123 Hube Bube");
 
         } catch (IOException e) {
             e.printStackTrace();

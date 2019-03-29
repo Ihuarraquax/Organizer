@@ -1,7 +1,9 @@
 package server;
 
-import communicator.Method;
-import org.pmw.tinylog.Logger;
+import communication.Communicator;
+import communication.Method;
+import communication.RequestResolver;
+import dao.EntityMenager;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,9 +15,12 @@ public class ClientThread implements Runnable {
     Socket socket;
     DataOutputStream out;
     DataInputStream in;
+    RequestResolver requestResolver;
 
-    public ClientThread(Socket clientSocket) {
-        socket = clientSocket;
+    public ClientThread(Socket clientSocket, EntityMenager entityMenager) {
+
+        this.requestResolver = new RequestResolver(entityMenager);
+        this.socket = clientSocket;
         try {
             out = new DataOutputStream(socket.getOutputStream());
             in = new DataInputStream(socket.getInputStream());
@@ -30,29 +35,15 @@ public class ClientThread implements Runnable {
     public void run() {
 
 
-        try {
+        Method method = Communicator.getMethod();
+        String body = Communicator.getBody();
 
-            Logger.info("Reading method int");
-            Method method = Method.values()[in.readInt()];
-            Logger.info(method.name());
-            switch (method) {
-                case LOGIN:
-                    break;
-                case REGISTER:
-                    break;
-                case POST:
-                    break;
-                case GET:
-                    break;
-                case UPDATE:
-                    break;
-                case DELETE:
-                    break;
-            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//            Method method = Method.values()[in.readInt()];
+//            String body = in.readUTF();
+
+
+        requestResolver.resolve(method, body);
     }
 
 }
