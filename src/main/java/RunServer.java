@@ -1,13 +1,8 @@
-import dao.EntityMenager;
-import entities.Event;
-import entities.User;
-import server.ServerImpl;
-
-import java.time.LocalDateTime;
+import server.ServerImplTCP;
 
 public class RunServer {
     public static void main(String[] args) {
 
-        ServerImpl server = new ServerImpl();
+        ServerImplTCP server = new ServerImplTCP();
     }
 }

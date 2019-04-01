@@ -12,37 +12,25 @@ import java.net.Socket;
 
 public class ClientThread implements Runnable {
 
-    Socket socket;
-    DataOutputStream out;
-    DataInputStream in;
+    Communicator communicator;
     RequestResolver requestResolver;
 
-    public ClientThread(Socket clientSocket, EntityMenager entityMenager) {
+    public ClientThread(Communicator communicator, EntityMenager entityMenager) {
 
         this.requestResolver = new RequestResolver(entityMenager);
-        this.socket = clientSocket;
-        try {
-            out = new DataOutputStream(socket.getOutputStream());
-            in = new DataInputStream(socket.getInputStream());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        this.communicator = communicator;
     }
 
     @Override
     public void run() {
+        while (true) {
+            serve();
+        }
+    }
 
-
-        Method method = Communicator.getMethod();
-        String body = Communicator.getBody();
-
-
-//            Method method = Method.values()[in.readInt()];
-//            String body = in.readUTF();
-
-
+    private void serve() {
+        Method method = communicator.getMethod();
+        String body = communicator.getBody();
         requestResolver.resolve(method, body);
     }
 

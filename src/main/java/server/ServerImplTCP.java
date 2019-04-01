@@ -9,16 +9,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerImpl {
+public class ServerImplTCP {
 
     ServerSocket serverSocket;
     List<Thread> clientThreadList;
     EntityMenager entityMenager;
     Communicator communicator;
 
-    public ServerImpl() {
-
-        communicator = new Communicator();
+    public ServerImplTCP() {
         entityMenager = new EntityMenager();
         clientThreadList = new ArrayList<>();
 
@@ -26,7 +24,8 @@ public class ServerImpl {
             serverSocket = new ServerSocket(3333);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                Thread clientThread = new Thread(new ClientThread(clientSocket, entityMenager));
+                Communicator communicator = new Communicator(clientSocket);
+                Thread clientThread = new Thread(new ClientThread(communicator, entityMenager));
                 clientThread.start();
                 clientThreadList.add(clientThread);
 
