@@ -21,12 +21,13 @@ public class EntityMenager {
         entityManager = entityManagerFactory.createEntityManager();
     }
 
-    public void saveUser(User user) {
+    public boolean saveUser(User user) {
 
         entityManager.getTransaction().begin();
         entityManager.persist(user);
         entityManager.getTransaction().commit();
         entityManager.refresh(user);
+        return true;
     }
 
     public void saveEvent(Event event) {

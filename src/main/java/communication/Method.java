@@ -1,6 +1,19 @@
 package communication;
 
 public enum Method {
-    LOGIN,REGISTER,POST,GET,GETALL,UPDATE,DELETE
+    LOGIN(0),REGISTER(1),POST(2),GET(3),GETALL(4),UPDATE(5),DELETE(6);
 
+    int value;
+
+    Method(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return this.value;
+    }
+
+    public static Method getMethodFromValue(int value) {
+        return Method.values()[value];
+    }
 }

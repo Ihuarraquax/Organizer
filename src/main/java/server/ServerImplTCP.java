@@ -29,7 +29,6 @@ public class ServerImplTCP {
                 clientThread.start();
                 clientThreadList.add(clientThread);
 
-
             }
         } catch (IOException e) {
             e.printStackTrace();

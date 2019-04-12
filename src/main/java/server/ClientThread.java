@@ -2,23 +2,17 @@ package server;
 
 import communication.Communicator;
 import communication.Method;
-import communication.RequestResolver;
 import dao.EntityMenager;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
+import entities.User;
 
 public class ClientThread implements Runnable {
 
     Communicator communicator;
-    RequestResolver requestResolver;
+    EntityMenager entityMenager;
 
     public ClientThread(Communicator communicator, EntityMenager entityMenager) {
-
-        this.requestResolver = new RequestResolver(entityMenager);
         this.communicator = communicator;
+        this.entityMenager = entityMenager;
     }
 
     @Override
@@ -30,10 +24,34 @@ public class ClientThread implements Runnable {
 
     private void serve() {
         Method method = communicator.getMethod();
-        String body = communicator.getBody();
-        requestResolver.resolve(method, body);
+
+        switch (method) {
+
+            case REGISTER:
+                User user = (User) communicator.getBody();
+                register(user);
+                break;
+            case LOGIN:
+                String login = (String) communicator.getBody();
+
+                break;
+            case POST:
+                break;
+            case GET:
+                break;
+            case GETALL:
+                break;
+            case UPDATE:
+                break;
+            case DELETE:
+                break;
+        }
     }
 
+    private void register(User user) {
+        boolean isHappy = entityMenager.saveUser(user);
+        communicator.sendResponseToClient(isHappy);
+    }
 }
 
 

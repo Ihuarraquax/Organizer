@@ -1,42 +1,54 @@
 package communication;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 // klasa pobierajaca i wysylajaca dane miedzy klientem a serverem;
 public class Communicator {
 
     private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
     public Communicator(Socket clientSocket) {
         this.socket = clientSocket;
         try {
-            this.in = new DataInputStream(socket.getInputStream());
-            this.out = new DataOutputStream(socket.getOutputStream());
+            this.in = new ObjectInputStream(socket.getInputStream());
+            this.out = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public Method getMethod() {
+
+        int methodValue;
         try {
-            return Method.values()[in.readInt()];
-        } catch (IOException e) {
+            methodValue = (Integer) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return Method.getMethodFromValue(methodValue);
+
+    }
+
+    public Object getBody() {
+
+        try {
+            return in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
-    public String getBody() {
+    public void sendResponseToClient(Object response) {
         try {
-            return in.readUTF();
+            out.writeObject((Boolean) response);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
     }
 }
