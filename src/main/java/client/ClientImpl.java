@@ -10,6 +10,7 @@ import java.util.List;
 public class ClientImpl implements ClientAPI {
 
     ClientCommunicator clientCommunicator;
+    User user;
 
     public ClientImpl() {
         clientCommunicator = new ClientCommunicator("localhost", 3333);
@@ -19,13 +20,12 @@ public class ClientImpl implements ClientAPI {
     @Override
     public boolean register(User user) {
         System.out.println("REGISTERING USER");
-        if (clientCommunicator.sendMethod(Method.REGISTER)) {
+        if (clientCommunicator.sendMethodAndGetComfirmation(Method.REGISTER)) {
             clientCommunicator.sendUser(user);
-            if(clientCommunicator.reviceComfirmation()){
+            if (clientCommunicator.reviceComfirmation()) {
                 System.out.println("USER REGISTRATION SUCCESS");
                 return true;
-            }
-            else {
+            } else {
                 System.out.println("USER REGISTRATION FAILED");
                 return false;
             }
@@ -36,6 +36,22 @@ public class ClientImpl implements ClientAPI {
 
     @Override
     public User login(String login, String pass) {
+
+        if (clientCommunicator.sendMethodAndGetComfirmation(Method.LOGIN)) {
+            System.out.println("+SENDING LOGIN AND PASS");
+            if (clientCommunicator.sendLoginInformations(login, pass)) {
+                System.out.println("+LOGGIN AND PASSWORD SEND SUCCESS");
+                user = clientCommunicator.reciveUser();
+                if (user == null) {
+                    System.out.println("-LOGGING FAILED");
+                    return null;
+                }
+                System.out.println("LOGGED AS: "+user);
+                return user;
+            } else {
+                System.out.println("+LOGGIN AND PASSWORD SEND FAILED");
+            }
+        }
         return null;
     }
 

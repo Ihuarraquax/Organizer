@@ -55,4 +55,11 @@ public class EntityMenager {
     public void refresh(Object object) {
         entityManager.refresh(object);
     }
+
+    public User login(String login, String pass) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.login=:login AND u.password=:password", User.class);
+        query.setParameter("login", login);
+        query.setParameter("password", pass);
+        return query.getSingleResult();
+    }
 }

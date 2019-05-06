@@ -58,4 +58,22 @@ public class ServerCommunicator {
             e.printStackTrace();
         }
     }
+
+    public String reciveString() {
+        try {
+            String string = (String) in.readObject();
+            sendComfirmation(Boolean.TRUE);
+            return string;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public void sendUser(User user) {
+        try {
+            out.writeObject(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

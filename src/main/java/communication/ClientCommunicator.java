@@ -24,7 +24,7 @@ public class ClientCommunicator {
         }
     }
 
-    public boolean sendMethod(Method method) {
+    public boolean sendMethodAndGetComfirmation(Method method) {
         try {
             out.writeObject(method);
             return reviceComfirmation();
@@ -53,4 +53,26 @@ public class ClientCommunicator {
     }
 
 
+    public boolean sendLoginInformations(String login, String pass) {
+        try {
+            out.writeObject(login);
+            if(reviceComfirmation()){
+                out.writeObject(pass);
+            }
+            return reviceComfirmation();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public User reciveUser() {
+        try {
+            User user = (User) in.readObject();
+            return user;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

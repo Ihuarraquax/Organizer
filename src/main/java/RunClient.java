@@ -14,7 +14,13 @@ public class RunClient {
             Method method = Method.values()[scanner.nextInt()];
             switch (method) {
                 case LOGIN:
+                    System.out.println("Podaj login");
+                    String login = scanner.next();
+                    System.out.println("Podaj haslo");
+                    String pass = scanner.next();
 
+
+                    client.login(login, pass);
                     break;
                 case REGISTER:
                     User user = new User("zabelko", "123123", "Hube", "Bube");
