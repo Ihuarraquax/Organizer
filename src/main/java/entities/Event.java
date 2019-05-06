@@ -1,9 +1,6 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,6 +12,7 @@ public class Event {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     @ManyToOne
+    @JoinColumn(name ="user_id")
     private User author;
 
     public Event() {

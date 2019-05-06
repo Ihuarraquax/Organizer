@@ -1,16 +1,36 @@
 import client.ClientImpl;
+import communication.Method;
 import entities.User;
+
+import java.util.Scanner;
 
 public class RunClient {
     public static void main(String[] args) {
 
         ClientImpl client = new ClientImpl();
+        Scanner scanner = new Scanner(System.in);
 
-        User user = new User("zabelko", "123123", "Hube", "Bube");
+        while (true) {
+            Method method = Method.values()[scanner.nextInt()];
+            switch (method) {
+                case LOGIN:
 
-        System.out.println(client.register(user));
-
-        client.login("zabelko", "123123");
-
+                    break;
+                case REGISTER:
+                    User user = new User("zabelko", "123123", "Hube", "Bube");
+                    client.register(user);
+                    break;
+                case POST:
+                    break;
+                case GET:
+                    break;
+                case GETALL:
+                    break;
+                case UPDATE:
+                    break;
+                case DELETE:
+                    break;
+            }
+        }
     }
 }

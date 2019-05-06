@@ -12,7 +12,6 @@ public enum Method {
     public int getValue() {
         return this.value;
     }
-
     public static Method getMethodFromValue(int value) {
         return Method.values()[value];
     }

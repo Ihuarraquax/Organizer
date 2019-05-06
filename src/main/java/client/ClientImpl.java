@@ -9,24 +9,34 @@ import java.util.List;
 
 public class ClientImpl implements ClientAPI {
 
-    ClientCommunicator communicator;
+    ClientCommunicator clientCommunicator;
 
     public ClientImpl() {
-        communicator = new ClientCommunicator("localhost", 3333);
+        clientCommunicator = new ClientCommunicator("localhost", 3333);
     }
 
+    // rejestruje usera i zwraca potwierdzenie, jesli sie udało true
     @Override
     public boolean register(User user) {
-        communicator.send(Method.REGISTER, user);
-        return communicator.reciveBoolean();
+        System.out.println("REGISTERING USER");
+        if (clientCommunicator.sendMethod(Method.REGISTER)) {
+            clientCommunicator.sendUser(user);
+            if(clientCommunicator.reviceComfirmation()){
+                System.out.println("USER REGISTRATION SUCCESS");
+                return true;
+            }
+            else {
+                System.out.println("USER REGISTRATION FAILED");
+                return false;
+            }
+
+        } else return false;
     }
+
 
     @Override
     public User login(String login, String pass) {
-        communicator.send(Method.LOGIN);
-        communicator.send(login);
-        communicator.send(pass);
-        return (User) communicator.reciveObject();
+        return null;
     }
 
     @Override

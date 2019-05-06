@@ -1,17 +1,17 @@
 package server;
 
-import communication.Communicator;
 import communication.Method;
+import communication.ServerCommunicator;
 import dao.EntityMenager;
 import entities.User;
 
 public class ClientThread implements Runnable {
 
-    Communicator communicator;
+    ServerCommunicator communicator;
     EntityMenager entityMenager;
 
-    public ClientThread(Communicator communicator, EntityMenager entityMenager) {
-        this.communicator = communicator;
+    public ClientThread(ServerCommunicator ServerCommunicator, EntityMenager entityMenager) {
+        this.communicator = ServerCommunicator;
         this.entityMenager = entityMenager;
     }
 
@@ -23,17 +23,19 @@ public class ClientThread implements Runnable {
     }
 
     private void serve() {
-        Method method = communicator.getMethod();
+        Method method = communicator.reciveMethodAndWriteComfirmation();
 
         switch (method) {
 
-            case REGISTER:
-                User user = (User) communicator.getBody();
-                register(user);
-                break;
             case LOGIN:
-                String login = (String) communicator.getBody();
-
+                break;
+            case REGISTER:
+                User userToRegister = communicator.reciveUser();
+                System.out.println("GOT USER TO REGISTRATION:");
+                System.out.println(userToRegister);
+                boolean happy = entityMenager.registerUser(userToRegister);
+                System.out.println("USER REGISTERED? "+happy);
+                communicator.sendComfirmation(happy);
                 break;
             case POST:
                 break;
@@ -49,8 +51,7 @@ public class ClientThread implements Runnable {
     }
 
     private void register(User user) {
-        boolean isHappy = entityMenager.saveUser(user);
-        communicator.sendResponseToClient(isHappy);
+
     }
 }
 

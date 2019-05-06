@@ -1,16 +1,19 @@
 package communication;
 
-import java.io.*;
+import entities.User;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-// klasa pobierajaca i wysylajaca dane miedzy klientem a serverem;
-public class Communicator {
+public class ServerCommunicator {
 
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
-    public Communicator(Socket clientSocket) {
+    public ServerCommunicator(Socket clientSocket) {
         this.socket = clientSocket;
         try {
             this.in = new ObjectInputStream(socket.getInputStream());
@@ -18,35 +21,39 @@ public class Communicator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Method getMethod() {
-
-        int methodValue;
-        try {
-            methodValue = (Integer) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return Method.getMethodFromValue(methodValue);
 
     }
 
-    public Object getBody() {
 
+    public Method reciveMethodAndWriteComfirmation() {
         try {
-            return in.readObject();
+            Method method = (Method) in.readObject();
+            comfirm(method);
+            return method;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
-    public void sendResponseToClient(Object response) {
+    private void comfirm(Method method) throws IOException {
+        if (method == null) out.writeObject(Boolean.FALSE);
+        else out.writeObject(Boolean.TRUE);
+    }
+
+    public User reciveUser() {
         try {
-            out.writeObject((Boolean) response);
+            User user = (User) in.readObject();
+            return user;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void sendComfirmation(Boolean b) {
+        try {
+            out.writeObject(b);
         } catch (IOException e) {
             e.printStackTrace();
         }

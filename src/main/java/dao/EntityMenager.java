@@ -4,31 +4,36 @@ package dao;
 import entities.Event;
 import entities.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 
 public class EntityMenager {
 
-    private final EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
     public EntityMenager() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("organizer");
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("organizer");
         entityManager = entityManagerFactory.createEntityManager();
     }
 
-    public boolean saveUser(User user) {
+    public boolean registerUser(User user) {
 
-        entityManager.getTransaction().begin();
-        entityManager.persist(user);
-        entityManager.getTransaction().commit();
-        entityManager.refresh(user);
-        return true;
+        if (checkIfLoginValid(user.getLogin())) {
+            entityManager.getTransaction().begin();
+            entityManager.persist(user);
+            entityManager.getTransaction().commit();
+            entityManager.refresh(user);
+            return true;
+        } else return false;
     }
+
+    private boolean checkIfLoginValid(String login) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.login=:login", User.class);
+        query.setParameter("login", login);
+        return (query.getResultList().size() == 0);
+    }
+
 
     public void saveEvent(Event event) {
         entityManager.getTransaction().begin();
@@ -43,7 +48,7 @@ public class EntityMenager {
     }
 
     public List<User> getAllUsers() {
-        Query query = entityManager.createQuery("SELECT e FROM User e");
+        Query query = entityManager.createQuery("SELECT u FROM User u");
         return (List<User>) query.getResultList();
     }
 

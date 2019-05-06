@@ -1,6 +1,6 @@
 package server;
 
-import communication.Communicator;
+import communication.ServerCommunicator;
 import dao.EntityMenager;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class ServerImplTCP {
     ServerSocket serverSocket;
     List<Thread> clientThreadList;
     EntityMenager entityMenager;
-    Communicator communicator;
+    ServerCommunicator serverCommunicator;
 
     public ServerImplTCP() {
         entityMenager = new EntityMenager();
@@ -24,8 +24,8 @@ public class ServerImplTCP {
             serverSocket = new ServerSocket(3333);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                Communicator communicator = new Communicator(clientSocket);
-                Thread clientThread = new Thread(new ClientThread(communicator, entityMenager));
+                ServerCommunicator serverCommunicator = new ServerCommunicator(clientSocket);
+                Thread clientThread = new Thread(new ClientThread(serverCommunicator, entityMenager));
                 clientThread.start();
                 clientThreadList.add(clientThread);
 
