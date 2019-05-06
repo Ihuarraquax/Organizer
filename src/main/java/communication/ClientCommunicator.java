@@ -1,5 +1,6 @@
 package communication;
 
+import entities.Event;
 import entities.User;
 
 import java.io.IOException;
@@ -74,5 +75,14 @@ public class ClientCommunicator {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void sendEvent(Event event) {
+        try {
+            out.writeObject(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

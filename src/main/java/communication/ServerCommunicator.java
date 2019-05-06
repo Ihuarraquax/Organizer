@@ -1,5 +1,6 @@
 package communication;
 
+import entities.Event;
 import entities.User;
 
 import java.io.IOException;
@@ -75,5 +76,16 @@ public class ServerCommunicator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Event reciveEvent() {
+        try {
+            Event event = (Event) in.readObject();
+            System.out.println("RECIVED EVENT FROM COMMUNICATOR: "+ event);
+            return event;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

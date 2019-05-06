@@ -46,7 +46,7 @@ public class ClientImpl implements ClientAPI {
                     System.out.println("-LOGGING FAILED");
                     return null;
                 }
-                System.out.println("LOGGED AS: "+user);
+                System.out.println("LOGGED AS: " + user);
                 return user;
             } else {
                 System.out.println("+LOGGIN AND PASSWORD SEND FAILED");
@@ -57,6 +57,22 @@ public class ClientImpl implements ClientAPI {
 
     @Override
     public boolean post(Event event) {
+        if (clientCommunicator.sendMethodAndGetComfirmation(Method.POST)) {
+            if (!clientCommunicator.reviceComfirmation()) {
+                System.out.println("YOU ARE NOT LOGGED IN");
+                return false;
+            }
+            clientCommunicator.sendEvent(event);
+
+            if (clientCommunicator.reviceComfirmation()) {
+                System.out.println(event.getName() + " +ADDED SUCCESS");
+                return true;
+            } else {
+                System.out.println(event.getName() + " -ADDED FAILED");
+                return false;
+            }
+
+        }
         return false;
     }
 

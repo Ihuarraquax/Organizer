@@ -1,7 +1,9 @@
 import client.ClientImpl;
 import communication.Method;
+import entities.Event;
 import entities.User;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class RunClient {
@@ -9,6 +11,8 @@ public class RunClient {
 
         ClientImpl client = new ClientImpl();
         Scanner scanner = new Scanner(System.in);
+        User user = new User("zabelko", "123123", "Hube", "Bube");
+        Event event = new Event("Jackonalia", LocalDateTime.now(), LocalDateTime.now().plusHours(2L), user);
 
         while (true) {
             Method method = Method.values()[scanner.nextInt()];
@@ -23,10 +27,10 @@ public class RunClient {
                     client.login(login, pass);
                     break;
                 case REGISTER:
-                    User user = new User("zabelko", "123123", "Hube", "Bube");
                     client.register(user);
                     break;
                 case POST:
+                    client.post(event);
                     break;
                 case GET:
                     break;

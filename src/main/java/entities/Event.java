@@ -1,10 +1,11 @@
 package entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-public class Event {
+public class Event implements Serializable {
     @Id
     @GeneratedValue
     private long id;
@@ -72,7 +73,7 @@ public class Event {
                 ", name='" + name + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", author=" + author.getFirstName() + " " + author.getLastName() +
+                ", author=" + author +
                 '}';
     }
 }

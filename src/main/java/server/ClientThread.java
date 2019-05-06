@@ -3,6 +3,7 @@ package server;
 import communication.Method;
 import communication.ServerCommunicator;
 import dao.EntityMenager;
+import entities.Event;
 import entities.User;
 
 public class ClientThread implements Runnable {
@@ -46,6 +47,20 @@ public class ClientThread implements Runnable {
                 communicator.sendComfirmation(happy);
                 break;
             case POST:
+                if (user != null) {
+                    communicator.sendComfirmation(Boolean.TRUE);
+                    Event event = communicator.reciveEvent();
+
+                    happy = entityMenager.saveEvent(event);
+                    System.out.println("EVENT ADDED? " + happy);
+                    communicator.sendComfirmation(happy);
+
+
+                } else {
+                    communicator.sendComfirmation(Boolean.FALSE);
+                    System.out.println("USER NOT LOGGED");
+                }
+
                 break;
             case GET:
                 break;

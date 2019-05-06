@@ -35,16 +35,27 @@ public class EntityMenager {
     }
 
 
-    public void saveEvent(Event event) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(event);
-        entityManager.getTransaction().commit();
-        entityManager.refresh(event);
+    public boolean saveEvent(Event event) {
+        if (eventIsValid(event)) {
+            entityManager.getTransaction().begin();
+            System.out.println(event);
+            entityManager.persist(event);
+            entityManager.getTransaction().commit();
+            entityManager.refresh(event);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean eventIsValid(Event event) {
+        List<Event> events = getAllEvents();
+        if(events.stream().filter(e -> e.getName().equals(event.getName()) ).count()>0) return false;
+        return true;
     }
 
     public List<Event> getAllEvents() {
-        Query query = entityManager.createQuery("SELECT e FROM Event e");
-        return (List<Event>) query.getResultList();
+        TypedQuery<Event> query = entityManager.createQuery("SELECT e FROM Event e", Event.class);
+        return query.getResultList();
     }
 
     public List<User> getAllUsers() {
@@ -60,6 +71,8 @@ public class EntityMenager {
         TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.login=:login AND u.password=:password", User.class);
         query.setParameter("login", login);
         query.setParameter("password", pass);
-        return query.getSingleResult();
+        List<User> resultList = query.getResultList();
+        if(resultList.size()==1) return resultList.get(0);
+        return null;
     }
 }
