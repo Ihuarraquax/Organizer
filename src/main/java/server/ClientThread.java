@@ -2,19 +2,23 @@ package server;
 
 import communication.Method;
 import communication.ServerCommunicator;
-import dao.EntityMenager;
+import dao.OrganizerService;
 import entities.Event;
 import entities.User;
 
+import javax.persistence.EntityManagerFactory;
+
 public class ClientThread implements Runnable {
 
-    ServerCommunicator communicator;
-    EntityMenager entityMenager;
-    User user;
+    ServerCommunicator c;
+    User currentlyLoggedUser;
 
-    public ClientThread(ServerCommunicator ServerCommunicator, EntityMenager entityMenager) {
-        this.communicator = ServerCommunicator;
-        this.entityMenager = entityMenager;
+    OrganizerService organizerService;
+
+    public ClientThread(ServerCommunicator ServerCommunicator, EntityManagerFactory entityManagerFactory) {
+        this.c = ServerCommunicator;
+        this.organizerService = new OrganizerService(entityManagerFactory);
+
     }
 
     @Override
@@ -25,66 +29,63 @@ public class ClientThread implements Runnable {
     }
 
     private void serve() {
-        Method method = communicator.reciveMethodAndWriteComfirmation();
+        Method method = c.reciveMethodAndWriteComfirmation();
 
         switch (method) {
 
             case LOGIN:
-                String login = communicator.reciveString();
-                String pass = communicator.reciveString();
-                user = entityMenager.login(login, pass);
-                communicator.sendUser(user);
+                String login = c.reciveString();
+                String pass = c.reciveString();
+                currentlyLoggedUser = organizerService.login(login, pass);
+                c.sendUser(currentlyLoggedUser);
                 break;
             case REGISTER:
-                User userToRegister = communicator.reciveUser();
+                User userToRegister = c.reciveUser();
                 System.out.println("GOT USER TO REGISTRATION:");
                 System.out.println(userToRegister);
-                boolean happy = entityMenager.registerUser(userToRegister);
+                boolean happy = organizerService.registerUser(userToRegister);
                 System.out.println("USER REGISTERED? " + happy);
-                communicator.sendComfirmation(happy);
+                c.sendComfirmation(happy);
                 break;
             case POST:
-                if (user != null) {
-                    communicator.sendComfirmation(Boolean.TRUE);
-                    Event event = communicator.reciveEvent();
+                if (currentlyLoggedUser != null) {
+                    c.sendComfirmation(Boolean.TRUE);
+                    Event event = c.reciveEvent();
 
-                    happy = entityMenager.saveEvent(event);
+                    happy = organizerService.saveEvent(event);
                     System.out.println("EVENT ADDED? " + happy);
-                    communicator.sendComfirmation(happy);
+                    c.sendComfirmation(happy);
                 } else {
-                    communicator.sendComfirmation(Boolean.FALSE);
+                    c.sendComfirmation(Boolean.FALSE);
                     System.out.println("USER NOT LOGGED");
                 }
                 break;
             case GET:
-                long id = communicator.reciveLong();
-                communicator.sendEvent(entityMenager.getEvent(id));
+                long id = c.reciveLong();
+                c.sendEvent(organizerService.getEvent(id));
                 break;
             case GETALL:
-                communicator.sendEvents(entityMenager.getAllEvents());
+                c.sendEvents(organizerService.getAllEvents());
                 break;
             case UPDATE:
-                id = communicator.reciveLong();
-                Event newEvent = communicator.reciveEvent();
-                Event eventToReplace = entityMenager.getEvent(id);
-                replaceFields(eventToReplace, newEvent);
-                entityMenager.update(eventToReplace);
+                id = c.reciveLong();
+                Event newEvent = c.reciveEvent();
+                Event eventToUpdate = organizerService.getEvent(id);
+                String[] params = getParams(newEvent);
+                organizerService.update(eventToUpdate, params);
                 break;
             case DELETE:
-                id = communicator.reciveLong();
-                Event eventToCheck = entityMenager.getEvent(id);
-                if(eventToCheck.getAuthor().getId()==user.getId()){
-                    entityMenager.delete(id);
+                id = c.reciveLong();
+                Event event = organizerService.getEvent(id);
+                if (event.getAuthor().getId() == currentlyLoggedUser.getId()) {
+                    organizerService.delete(event);
                 }
                 break;
         }
     }
 
-    private void replaceFields(Event eventToUpdate, Event newEvent) {
-        eventToUpdate.setName(newEvent.getName());
-        eventToUpdate.setAuthor(newEvent.getAuthor());
-        eventToUpdate.setStartDate(newEvent.getStartDate());
-        eventToUpdate.setEndDate(newEvent.getEndDate());
+    private String[] getParams(Event newEvent) {
+        return new String[]{newEvent.getName(), newEvent.getStartDate().toString(), newEvent.getEndDate().toString()};
     }
 }
 
