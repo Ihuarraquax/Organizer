@@ -32,11 +32,8 @@ public class ClientThread implements Runnable {
             case LOGIN:
                 String login = communicator.reciveString();
                 String pass = communicator.reciveString();
-
                 user = entityMenager.login(login, pass);
-
                 communicator.sendUser(user);
-
                 break;
             case REGISTER:
                 User userToRegister = communicator.reciveUser();
@@ -54,27 +51,40 @@ public class ClientThread implements Runnable {
                     happy = entityMenager.saveEvent(event);
                     System.out.println("EVENT ADDED? " + happy);
                     communicator.sendComfirmation(happy);
-
-
                 } else {
                     communicator.sendComfirmation(Boolean.FALSE);
                     System.out.println("USER NOT LOGGED");
                 }
-
                 break;
             case GET:
+                long id = communicator.reciveLong();
+                communicator.sendEvent(entityMenager.getEvent(id));
                 break;
             case GETALL:
+                communicator.sendEvents(entityMenager.getAllEvents());
                 break;
             case UPDATE:
+                id = communicator.reciveLong();
+                Event newEvent = communicator.reciveEvent();
+                Event eventToReplace = entityMenager.getEvent(id);
+                replaceFields(eventToReplace, newEvent);
+                entityMenager.update(eventToReplace);
                 break;
             case DELETE:
+                id = communicator.reciveLong();
+                Event eventToCheck = entityMenager.getEvent(id);
+                if(eventToCheck.getAuthor().getId()==user.getId()){
+                    entityMenager.delete(id);
+                }
                 break;
         }
     }
 
-    private void register(User user) {
-
+    private void replaceFields(Event eventToUpdate, Event newEvent) {
+        eventToUpdate.setName(newEvent.getName());
+        eventToUpdate.setAuthor(newEvent.getAuthor());
+        eventToUpdate.setStartDate(newEvent.getStartDate());
+        eventToUpdate.setEndDate(newEvent.getEndDate());
     }
 }
 

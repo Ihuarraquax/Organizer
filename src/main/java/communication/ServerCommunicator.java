@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class ServerCommunicator {
 
@@ -87,5 +88,30 @@ public class ServerCommunicator {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void sendEvents(List<Event> allEvents) {
+        try {
+            out.writeObject(allEvents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendEvent(Event event) {
+        try {
+            out.writeObject(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public long reciveLong() {
+        try {
+            return (Long) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

@@ -13,7 +13,7 @@ public class ClientImpl implements ClientAPI {
     User user;
 
     public ClientImpl() {
-        clientCommunicator = new ClientCommunicator("localhost", 3333);
+        clientCommunicator = new ClientCommunicator("localhost", 3334);
     }
 
     // rejestruje usera i zwraca potwierdzenie, jesli sie udało true
@@ -78,21 +78,33 @@ public class ClientImpl implements ClientAPI {
 
     @Override
     public Event get(long id) {
+        if (clientCommunicator.sendMethodAndGetComfirmation(Method.GET)) {
+            return clientCommunicator.reciveEvent(id);
+        }
         return null;
     }
 
     @Override
     public List<Event> getAll() {
+        if (clientCommunicator.sendMethodAndGetComfirmation(Method.GETALL)) {
+            return clientCommunicator.reciveEventList();
+        }
         return null;
     }
 
     @Override
-    public Event update(long id, Event event) {
-        return null;
+    public void update(long id, Event newEvent) {
+        if (clientCommunicator.sendMethodAndGetComfirmation(Method.UPDATE)) {
+            clientCommunicator.update(id,newEvent);
+        }
     }
 
     @Override
     public boolean delete(long id) {
+        if (clientCommunicator.sendMethodAndGetComfirmation(Method.DELETE)) {
+            clientCommunicator.delete(id);
+
+        }
         return false;
     }
 }

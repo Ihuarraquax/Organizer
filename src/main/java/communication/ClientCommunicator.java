@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class ClientCommunicator {
 
@@ -57,7 +58,7 @@ public class ClientCommunicator {
     public boolean sendLoginInformations(String login, String pass) {
         try {
             out.writeObject(login);
-            if(reviceComfirmation()){
+            if (reviceComfirmation()) {
                 out.writeObject(pass);
             }
             return reviceComfirmation();
@@ -80,6 +81,43 @@ public class ClientCommunicator {
     public void sendEvent(Event event) {
         try {
             out.writeObject(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Event> reciveEventList() {
+        try {
+            return (List<Event>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Event reciveEvent(long id) {
+        try {
+            out.writeObject(id);
+            return (Event) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void update(long id, Event event) {
+        try {
+            out.writeObject(id);
+            out.writeObject(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void delete(long id) {
+        try {
+            out.writeObject(id);
         } catch (IOException e) {
             e.printStackTrace();
         }

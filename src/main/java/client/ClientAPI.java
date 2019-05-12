@@ -17,7 +17,7 @@ public interface ClientAPI {
 
     List<Event> getAll();
 
-    Event update(long id, Event event);
+    void update(long id, Event event);
 
     boolean delete(long id);
 
