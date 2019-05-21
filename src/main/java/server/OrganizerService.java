@@ -1,6 +1,8 @@
-package dao;
+package server;
 
 
+import dao.EventDao;
+import dao.UserDao;
 import entities.Event;
 import entities.User;
 

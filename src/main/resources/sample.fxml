@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+
+<VBox fx:id="regis" prefHeight="200.0" prefWidth="191.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <TextField fx:id="loginTextField" promptText="login" />
+      <PasswordField fx:id="passwordField" promptText="haseło" />
+      <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginUser" text="Zaloguj" />
+      <Button fx:id="registerButton" mnemonicParsing="false" onAction="#openRegisterWindow" text="Stwórz konto" />
+   </children>
+</VBox>

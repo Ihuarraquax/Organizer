@@ -2,7 +2,6 @@ package server;
 
 import communication.Method;
 import communication.ServerCommunicator;
-import dao.OrganizerService;
 import entities.Event;
 import entities.User;
 
