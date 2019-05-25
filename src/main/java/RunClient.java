@@ -1,6 +1,7 @@
 import client.ClientImpl;
 import communication.Method;
 import entities.Event;
+import entities.EventType;
 import entities.User;
 
 import java.time.LocalDateTime;
@@ -12,12 +13,12 @@ public class RunClient {
 
         ClientImpl client = new ClientImpl();
         Scanner scanner = new Scanner(System.in);
-        User user = new User("zabelko", "123123", "Hube", "Bube");
-        User user2 = new User("zabi", "123123", "Ihu", "arraquax");
+        User user = new User("zabelko", "123123", "zablo432432@o2.pl", "Hube", "Bube");
+        User user2 = new User("zabi", "123123","hzablo@o2.pl", "Ihu", "arraquax");
 
-        Event event = new Event("Jackonalia", LocalDateTime.now(), LocalDateTime.now().plusHours(2L), user);
-        Event event2 = new Event("nowyevent", LocalDateTime.now(), LocalDateTime.now().plusHours(3L), user);
-        Event event3 = new Event("raid", LocalDateTime.now(), LocalDateTime.now().plusHours(3L), user2);
+        Event event = new Event("Jackonalia", EventType.PARTY, LocalDateTime.now(), LocalDateTime.now().plusHours(2L), user);
+        Event event2 = new Event("nowyevent",EventType.CALL , LocalDateTime.now(), LocalDateTime.now().plusHours(3L), user);
+        Event event3 = new Event("raid",EventType.PARTY, LocalDateTime.now(), LocalDateTime.now().plusHours(3L), user2);
 
         client.register(user);
         client.register(user2);

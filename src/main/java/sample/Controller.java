@@ -26,6 +26,7 @@ public class Controller implements Initializable {
     public PasswordField passwordRegisterPasswordField;
     public TextField firstNameRegisterTextField;
     public TextField lastNameRegisterTextField;
+    public TextField emailRegisterTextField;
     @FXML
     Button loginButton;
     @FXML
@@ -38,26 +39,41 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         clientFunctionality = new ClientImpl();
+
     }
 
 
     public void loginUser() {
         loggedUser = clientFunctionality.login(loginTextField.getText(), passwordField.getText());
 
-        if(!Objects.isNull(loggedUser)) {
+        if (!Objects.isNull(loggedUser)) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("SUKCES");
-            alert.setHeaderText("WITAJ "+loggedUser.getFirstName()+"!");
+            alert.setHeaderText("WITAJ " + loggedUser.getFirstName() + "!");
             alert.setContentText("elelel");
+            openMainWindow();
             alert.showAndWait();
-        }
-        else {
+
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ZLE PASY");
             alert.setHeaderText("PODALES NIEPRAWIDLOWE DANE LOGOWOADNAIDA");
             alert.setContentText("Spróbuj jeszcze raz");
             alert.showAndWait();
         }
+    }
+
+    private void openMainWindow() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader().getResource("main.fxml"));
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        MainWindowController mainWindow = loader.getController();
+        mainWindow.setClientFunctionality(clientFunctionality);
     }
 
     public void openRegisterWindow(ActionEvent actionEvent) {
@@ -76,18 +92,18 @@ public class Controller implements Initializable {
         User user = new User(
                 loginRegisterTextField.getText(),
                 passwordRegisterPasswordField.getText(),
+                emailRegisterTextField.getText(),
                 firstNameRegisterTextField.getText(),
                 lastNameRegisterTextField.getText());
         boolean register = clientFunctionality.register(user);
 
-        if(register) {
+        if (register) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("SUKCES");
             alert.setHeaderText("WITAJ NOWY UZYTKOWNIKU");
             alert.setContentText("Możesz się zalogować w panelu logowania");
             alert.showAndWait();
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("NIEPOWODZENIE");
             alert.setHeaderText("asd");

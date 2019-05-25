@@ -14,6 +14,7 @@ public class User implements Serializable {
     private long id;
     private String login;
     private String password;
+    private String email;
     private String firstName;
     private String lastName;
     private LocalDateTime registerDate;
@@ -22,9 +23,10 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String login, String password, String firstName, String lastName) {
+    public User(String login, String password, String email, String firstName, String lastName) {
         this.login = login;
         this.password = password;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.registerDate = LocalDateTime.now();
@@ -38,6 +40,14 @@ public class User implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public long getId() {

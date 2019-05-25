@@ -20,7 +20,7 @@ public class ServerImplTCP {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("organizer");
 
         try {
-            serverSocket = new ServerSocket(3334);
+            serverSocket = new ServerSocket(3333);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 ServerCommunicator serverCommunicator = new ServerCommunicator(clientSocket);

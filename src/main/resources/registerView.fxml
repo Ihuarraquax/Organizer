@@ -9,6 +9,7 @@
    <children>
       <TextField fx:id="loginRegisterTextField" promptText="login" />
       <PasswordField fx:id="passwordRegisterPasswordField" promptText="hasło" />
+      <TextField fx:id="emailRegisterTextField" promptText="email" />
       <TextField fx:id="firstNameRegisterTextField" promptText="imię" />
       <TextField fx:id="lastNameRegisterTextField" promptText="nazwisko" />
       <Button fx:id="submitRegisterButton" mnemonicParsing="false" onAction="#register" text="Dołącz" />

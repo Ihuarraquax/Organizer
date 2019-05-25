@@ -7,13 +7,14 @@ import entities.User;
 
 import java.util.List;
 
+
 public class ClientImpl implements ClientAPI {
 
     ClientCommunicator clientCommunicator;
     User user;
 
     public ClientImpl() {
-        clientCommunicator = new ClientCommunicator("localhost", 3334);
+        clientCommunicator = new ClientCommunicator("localhost", 3333);
     }
 
     // rejestruje usera i zwraca potwierdzenie, jesli sie udało true

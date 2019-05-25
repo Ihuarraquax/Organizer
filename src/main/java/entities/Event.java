@@ -10,6 +10,8 @@ public class Event implements Serializable {
     @GeneratedValue
     private long id;
     private String name;
+    private EventType type;
+    private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     @ManyToOne
@@ -19,11 +21,20 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(String name, LocalDateTime startDate, LocalDateTime endDate, User author) {
+    public Event(String name, EventType type, LocalDateTime startDate, LocalDateTime endDate, User author) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.author = author;
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public long getId() {
@@ -52,6 +63,14 @@ public class Event implements Serializable {
 
     public LocalDateTime getEndDate() {
         return endDate;
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
     }
 
     public void setEndDate(LocalDateTime endDate) {

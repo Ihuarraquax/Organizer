@@ -114,4 +114,8 @@ public class ServerCommunicator {
         }
         return -1;
     }
+
+    public void sendStatus(String message) {
+
+    }
 }
