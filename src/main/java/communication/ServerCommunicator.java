@@ -11,9 +11,9 @@ import java.util.List;
 
 public class ServerCommunicator {
 
-    private Socket socket;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
+    public Socket socket;
+    public ObjectInputStream in;
+    public ObjectOutputStream out;
 
     public ServerCommunicator(Socket clientSocket) {
         this.socket = clientSocket;
@@ -113,11 +113,9 @@ public class ServerCommunicator {
         return -1;
     }
 
-    public void sendStatus(String message) {
 
-    }
-
-    public boolean connectionClosed() {
+    public boolean socketIsClosed() {
         return socket.isClosed();
     }
+
 }
