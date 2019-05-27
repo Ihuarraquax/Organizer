@@ -1,7 +1,7 @@
 package sample;
 
 import client.ClientAPI;
-import client.ClientImpl;
+import client.ClientImplSingleton;
 import entities.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +20,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class LoginAndRegisterController implements Initializable {
 
     public TextField loginRegisterTextField;
     public PasswordField passwordRegisterPasswordField;
@@ -38,7 +38,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        clientFunctionality = new ClientImpl();
+        clientFunctionality = ClientImplSingleton.getInstance();
 
     }
 
@@ -47,13 +47,9 @@ public class Controller implements Initializable {
         loggedUser = clientFunctionality.login(loginTextField.getText(), passwordField.getText());
 
         if (!Objects.isNull(loggedUser)) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("SUKCES");
-            alert.setHeaderText("WITAJ " + loggedUser.getFirstName() + "!");
-            alert.setContentText("elelel");
             openMainWindow();
-            alert.showAndWait();
-
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.close();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ZLE PASY");
@@ -64,16 +60,18 @@ public class Controller implements Initializable {
     }
 
     private void openMainWindow() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("main.fxml"));
 
         try {
-            loader.load();
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        MainWindowController mainWindow = loader.getController();
-        mainWindow.setClientFunctionality(clientFunctionality);
+
+
+
     }
 
     public void openRegisterWindow(ActionEvent actionEvent) {
@@ -103,6 +101,8 @@ public class Controller implements Initializable {
             alert.setHeaderText("WITAJ NOWY UZYTKOWNIKU");
             alert.setContentText("Możesz się zalogować w panelu logowania");
             alert.showAndWait();
+            Stage stage = (Stage) emailRegisterTextField.getScene().getWindow();
+            stage.close();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("NIEPOWODZENIE");

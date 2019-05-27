@@ -27,15 +27,12 @@ public class ServerCommunicator {
     }
 
 
-    public Method reciveMethodAndWriteComfirmation() {
-        try {
-            Method method = (Method) in.readObject();
-            comfirm(method);
-            return method;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Method reciveMethodAndWriteComfirmation() throws IOException, ClassNotFoundException {
+
+        Method method = (Method) in.readObject();
+        comfirm(method);
+        return method;
+
     }
 
     private void comfirm(Method method) throws IOException {
@@ -71,6 +68,7 @@ public class ServerCommunicator {
         }
         return null;
     }
+
     public void sendUser(User user) {
         try {
             out.writeObject(user);
@@ -82,7 +80,7 @@ public class ServerCommunicator {
     public Event reciveEvent() {
         try {
             Event event = (Event) in.readObject();
-            System.out.println("RECIVED EVENT FROM COMMUNICATOR: "+ event);
+            System.out.println("RECIVED EVENT FROM COMMUNICATOR: " + event);
             return event;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -117,5 +115,9 @@ public class ServerCommunicator {
 
     public void sendStatus(String message) {
 
+    }
+
+    public boolean connectionClosed() {
+        return socket.isClosed();
     }
 }

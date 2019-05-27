@@ -6,6 +6,7 @@ import entities.Event;
 import entities.User;
 
 import javax.persistence.EntityManagerFactory;
+import java.io.IOException;
 
 public class ClientThread implements Runnable {
 
@@ -22,13 +23,22 @@ public class ClientThread implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             serve();
         }
     }
 
     private void serve() {
-        Method method = c.reciveMethodAndWriteComfirmation();
+        Method method = null;
+        try {
+            method = c.reciveMethodAndWriteComfirmation();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(Thread.currentThread().getName()+ "is closed");
+            if (c.connectionClosed()) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
 
         switch (method) {
 

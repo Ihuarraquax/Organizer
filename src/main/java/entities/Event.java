@@ -14,7 +14,7 @@ public class Event implements Serializable {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name ="user_id")
     private User author;
 
