@@ -34,7 +34,7 @@ public class LoginAndRegisterController implements Initializable {
     @FXML
     PasswordField passwordField;
     private ClientAPI clientFunctionality;
-    private User loggedUser;
+    public static User loggedUser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

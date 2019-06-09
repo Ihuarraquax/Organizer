@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.media.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainWindowController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainWindowController">
     <top>
         <VBox BorderPane.alignment="CENTER">
             <children>
@@ -45,16 +46,70 @@
         </VBox>
     </left>
     <center>
-        <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <columns>
-            <TableColumn fx:id="nameTableCol" prefWidth="75.0" text="Column X" />
-            <TableColumn fx:id="typeTableCol" prefWidth="75.0" text="Column X" />
-            <TableColumn fx:id="startdateTableCol" prefWidth="75.0" text="Column X" />
-            <TableColumn fx:id="enddateTableCol" prefWidth="75.0" text="Column X" />
-         </columns>
-        </TableView>
+      <VBox>
+         <children>
+              <TableView fx:id="eventTable" minHeight="-Infinity" prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <columns>
+                  <TableColumn fx:id="nameTableCol" minWidth="200.0" prefWidth="75.0" text="Nazwa" />
+                  <TableColumn fx:id="typeTableCol" minWidth="90.0" prefWidth="90.0" text="Typ" />
+                  <TableColumn fx:id="startdateTableCol" minWidth="125.0" prefWidth="144.0" text="Od" />
+                  <TableColumn fx:id="enddateTableCol" minWidth="125.0" prefWidth="75.0" text="Do" />
+                  <TableColumn fx:id="descriptionTableCol" minWidth="150.0" prefWidth="75.0" text="Opis" />
+                  <TableColumn fx:id="authorTableCol" minWidth="100.0" prefWidth="75.0" text="Autor" />
+               </columns>
+              </TableView>
+            <HBox>
+               <children>
+                  <VBox>
+                     <children>
+                        <TextField fx:id="addEventName" promptText="Nazwa" />
+                        <TextArea fx:id="addEventDescription" prefHeight="200.0" prefWidth="200.0" promptText="Opis" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <HBox>
+                           <children>
+                              <DatePicker fx:id="addEventStartDate" promptText="Start" />
+                              <TextField fx:id="addEventStartDateTimeH" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" />
+                              <TextField fx:id="addEventStartDateTimeM" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <DatePicker fx:id="addEventEndDate" promptText="Koniec" />
+                              <TextField fx:id="addEventEndDateTimeH" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" />
+                              <TextField fx:id="addEventEndDateTimeM" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" />
+                           </children>
+                        </HBox>
+                        <ChoiceBox fx:id="addEventType" prefWidth="150.0" />
+                        <Button fx:id="addEventSubmit" mnemonicParsing="false" onAction="#addEvent" text="Dodaj" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="deleteEventButton" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="83.0" text="Usun" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
     </center>
     <right>
-        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+        <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
     </right>
+   <bottom>
+      <HBox alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="loggedUserLabel" text="&lt;zalogowany user&gt;">
+               <graphic>
+                  <Pane />
+               </graphic>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="1.0" left="1.0" right="5.0" top="1.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

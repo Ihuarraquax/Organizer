@@ -34,12 +34,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        return getFirstName() + " " + getLastName();
     }
 
     public String getEmail() {

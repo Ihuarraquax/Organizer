@@ -11,10 +11,11 @@ public class Event implements Serializable {
     private long id;
     private String name;
     private EventType type;
+
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name ="user_id")
     private User author;
 
