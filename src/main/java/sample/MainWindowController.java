@@ -7,6 +7,7 @@ import entities.EventType;
 import entities.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class MainWindowController implements Initializable {
     @FXML
@@ -52,14 +54,25 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         clientFunctionality = ClientImplSingleton.getInstance();
         user = LoginAndRegisterController.loggedUser;
+        initCheckboxes();
         initEventTable();
         initLoggedUserLabel();
 
         initMiscellaneous();
     }
 
+    private void initCheckboxes() {
+        checkMeeting.setSelected(true);
+        checkCall.setSelected(true);
+        checkBusiness.setSelected(true);
+        checkFamily.setSelected(true);
+        checkParty.setSelected(true);
+        checkOnlyMine.setSelected(false);
+    }
+
     private void initMiscellaneous() {
         addEventType.getItems().setAll(EventType.values());
+
     }
 
 
@@ -110,7 +123,7 @@ public class MainWindowController implements Initializable {
 
     }
 
-    private void refreshEventTable() {
+    public void refreshEventTable() {
         eventTable.getItems().setAll(getEvents());
     }
 
@@ -131,7 +144,7 @@ public class MainWindowController implements Initializable {
         eventTable.getItems().setAll(getEvents());
     }
 
-    private ObservableList<Event> getEvents() {
+    private FilteredList<Event> getEvents() {
         List<Event> events = clientFunctionality.getAll();
         for (Event event : events) {
             System.out.println(event);
@@ -141,6 +154,21 @@ public class MainWindowController implements Initializable {
         for (Event eventDatum : eventData) {
             System.out.println(eventDatum);
         }
-        return eventData;
+        FilteredList<Event> list = new FilteredList<>(eventData);
+
+        //checkMeeting, checkCall, checkBusiness, checkFamily, checkParty, checkOnlyMine;
+        Predicate<Event> isMeeting = e -> checkMeeting.isSelected() && e.getType() == EventType.MEETING;
+        Predicate<Event> isCall = e -> checkCall.isSelected() && e.getType() == EventType.CALL;
+        Predicate<Event> isBusiness = e -> checkBusiness.isSelected() && e.getType() == EventType.BUSINESS;
+        Predicate<Event> isFamily = e -> checkFamily.isSelected() && e.getType() == EventType.FAMILY;
+        Predicate<Event> isParty = e -> checkParty.isSelected() && e.getType() == EventType.PARTY;
+        Predicate<Event> isOnlyMine = e -> (checkOnlyMine.isSelected() && e.getAuthor().getId() == user.getId()) || !checkOnlyMine.isSelected();
+
+        list.setPredicate(isOnlyMine.and(isMeeting.or(isCall).or(isBusiness).or(isFamily).or(isParty)));
+        //list.setPredicate(isOnlyMine);
+
+        return list;
+
+
     }
 }

@@ -72,7 +72,7 @@
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin></CheckBox>
-            <Button fx:id="filterButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Filtruj">
+            <Button fx:id="filterButton" mnemonicParsing="false" onAction="#refreshEventTable" prefHeight="25.0" prefWidth="77.0" text="Filtruj">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
