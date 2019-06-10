@@ -44,6 +44,10 @@ public class MainWindowController implements Initializable {
 
     public CheckBox checkMeeting, checkCall, checkBusiness, checkFamily, checkParty, checkOnlyMine;
     public Button filterButton;
+    public TableView<Event> todayEventTable;
+    public TableColumn<Event, String> todayCol;
+    public TableView<Event> thisWeekEventTable;
+    public TableColumn<Event, String> thisWeekCol;
 
 
     private ClientAPI clientFunctionality;
@@ -101,7 +105,7 @@ public class MainWindowController implements Initializable {
 
         System.out.println(e);
         clientFunctionality.post(e);
-        refreshEventTable();
+        refreshEventTables();
 
     }
 
@@ -118,13 +122,15 @@ public class MainWindowController implements Initializable {
                 alert.showAndWait();
             }
         }
-        refreshEventTable();
+        refreshEventTables();
 
 
     }
 
-    public void refreshEventTable() {
-        eventTable.getItems().setAll(getEvents());
+    public void refreshEventTables() {
+        eventTable.getItems().setAll(getFilteredEvents());
+        todayEventTable.getItems().setAll(getFilteredTodayEvents());
+        thisWeekEventTable.getItems().setAll(getFilteredWeekEvents());
     }
 
 
@@ -141,22 +147,32 @@ public class MainWindowController implements Initializable {
         enddateTableCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         descriptionTableCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         authorTableCol.setCellValueFactory(new PropertyValueFactory<>("author"));
-        eventTable.getItems().setAll(getEvents());
+        eventTable.getItems().setAll(getFilteredEvents());
+
+//        public TableView todayEventTable;
+//        public TableColumn todayCol;
+//        public TableView thisWeekEventTable;
+//        public TableColumn thisWeekCol;
+
+        todayCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        thisWeekCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        todayEventTable.getItems().setAll(getFilteredTodayEvents());
+        thisWeekEventTable.getItems().setAll(getFilteredWeekEvents());
+
+
     }
 
-    private FilteredList<Event> getEvents() {
+    private FilteredList<Event> getFilteredEvents() {
         List<Event> events = clientFunctionality.getAll();
         for (Event event : events) {
             System.out.println(event);
         }
         ObservableList<Event> eventData = FXCollections.observableArrayList();
         eventData.setAll(events);
-        for (Event eventDatum : eventData) {
-            System.out.println(eventDatum);
-        }
+
         FilteredList<Event> list = new FilteredList<>(eventData);
 
-        //checkMeeting, checkCall, checkBusiness, checkFamily, checkParty, checkOnlyMine;
         Predicate<Event> isMeeting = e -> checkMeeting.isSelected() && e.getType() == EventType.MEETING;
         Predicate<Event> isCall = e -> checkCall.isSelected() && e.getType() == EventType.CALL;
         Predicate<Event> isBusiness = e -> checkBusiness.isSelected() && e.getType() == EventType.BUSINESS;
@@ -165,10 +181,37 @@ public class MainWindowController implements Initializable {
         Predicate<Event> isOnlyMine = e -> (checkOnlyMine.isSelected() && e.getAuthor().getId() == user.getId()) || !checkOnlyMine.isSelected();
 
         list.setPredicate(isOnlyMine.and(isMeeting.or(isCall).or(isBusiness).or(isFamily).or(isParty)));
-        //list.setPredicate(isOnlyMine);
+
 
         return list;
 
+
+    }
+
+    private FilteredList<Event> getFilteredTodayEvents() {
+        List<Event> events = clientFunctionality.getAll();
+        ObservableList<Event> eventData = FXCollections.observableArrayList();
+        eventData.setAll(events);
+        FilteredList<Event> list = new FilteredList<>(eventData);
+
+        Predicate<Event> isToday = e -> e.getStartDate().isBefore(LocalDateTime.now().plusDays(1L)) && e.getStartDate().isAfter(LocalDateTime.now()) ;
+
+        list.setPredicate(isToday);
+
+        return list;
+
+    }
+    private FilteredList<Event> getFilteredWeekEvents() {
+        List<Event> events = clientFunctionality.getAll();
+        ObservableList<Event> eventData = FXCollections.observableArrayList();
+        eventData.setAll(events);
+        FilteredList<Event> list = new FilteredList<>(eventData);
+
+        Predicate<Event> isInThisWeek = e -> e.getStartDate().isBefore(LocalDateTime.now().plusDays(7L)) && e.getStartDate().isAfter(LocalDateTime.now()) ;
+
+        list.setPredicate(isInThisWeek);
+
+        return list;
 
     }
 }

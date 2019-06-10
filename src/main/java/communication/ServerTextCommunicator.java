@@ -156,8 +156,8 @@ public class ServerTextCommunicator implements ServerCommunicatorAPI {
             out.writeUTF(event.getType().toString());
             sendUser(event.getAuthor());
             out.writeUTF(event.getDescription());
-            out.writeUTF(event.getEndDate().toString());
             out.writeUTF(event.getStartDate().toString());
+            out.writeUTF(event.getEndDate().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
