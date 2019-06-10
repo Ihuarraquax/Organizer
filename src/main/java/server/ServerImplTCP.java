@@ -1,7 +1,7 @@
 package server;
 
 import communication.Method;
-import communication.ServerCommunicator;
+import communication.ServerTextCommunicator;
 import entities.Event;
 import entities.User;
 
@@ -12,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ServerImplTCP {
 
@@ -26,7 +27,7 @@ public class ServerImplTCP {
             serverSocket = new ServerSocket(3333);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                ServerCommunicator serverCommunicator = new ServerCommunicator(clientSocket);
+                ServerTextCommunicator serverCommunicator = new ServerTextCommunicator(clientSocket);
 
                 Thread clientThread = new Thread(new ClientThread(serverCommunicator, entityManagerFactory));
                 clientThread.start();
@@ -41,13 +42,13 @@ public class ServerImplTCP {
 
     public class ClientThread implements Runnable {
 
-        ServerCommunicator c;
+        ServerTextCommunicator c;
         User currentlyLoggedUser;
 
         OrganizerService organizerService;
 
-        public ClientThread(ServerCommunicator ServerCommunicator, EntityManagerFactory entityManagerFactory) {
-            this.c = ServerCommunicator;
+        public ClientThread(ServerTextCommunicator communicator, EntityManagerFactory entityManagerFactory) {
+            this.c = communicator;
             this.organizerService = new OrganizerService(entityManagerFactory);
 
         }
@@ -58,17 +59,16 @@ public class ServerImplTCP {
                 while (!Thread.currentThread().isInterrupted()) {
                     serve();
                 }
-            }
-            finally {
+            } finally {
                 closeConnections();
             }
 
         }
 
         private void serve() {
-            Method method = null;
+            Method method;
             try {
-                method = c.reciveMethodAndWriteComfirmation();
+                method = c.reciveMethodAndSendComfirmation();
             } catch (Exception e) {
                 System.out.println(Thread.currentThread().getName() + " is closed");
                 Thread.currentThread().interrupt();
@@ -79,9 +79,16 @@ public class ServerImplTCP {
 
                 case LOGIN:
                     String login = c.reciveString();
+                    System.out.println("login: " + login);
                     String pass = c.reciveString();
-                    currentlyLoggedUser = organizerService.login(login, pass);
-                    c.sendUser(currentlyLoggedUser);
+                    System.out.println("pass: " + pass);
+                    if (login == null || pass == null) {
+                        c.sendComfirmation(false);
+                    } else {
+                        c.sendComfirmation(true);
+                        currentlyLoggedUser = organizerService.login(login, pass);
+                        c.sendUser(currentlyLoggedUser);
+                    }
                     break;
                 case REGISTER:
                     User userToRegister = c.reciveUser();
@@ -95,6 +102,11 @@ public class ServerImplTCP {
                     if (currentlyLoggedUser != null) {
                         c.sendComfirmation(Boolean.TRUE);
                         Event event = c.reciveEvent();
+                        User author = event.getAuthor();
+                        User exisitingUser = organizerService.login(author.getLogin(), author.getPassword());
+                        if(!Objects.isNull(exisitingUser)){
+                            event.setAuthor(exisitingUser);
+                        }
 
                         happy = organizerService.saveEvent(event);
                         System.out.println("EVENT ADDED? " + happy);
@@ -109,7 +121,12 @@ public class ServerImplTCP {
                     c.sendEvent(organizerService.getEvent(id));
                     break;
                 case GETALL:
-                    c.sendEvents(organizerService.getAllEvents());
+                    List<Event> allEvents = organizerService.getAllEvents();
+                    for (Event allEvent : allEvents) {
+                        System.out.println(allEvent);
+                    }
+                    c.sendEventSize(allEvents.size());
+                    c.sendEvents(allEvents);
                     break;
                 case UPDATE:
                     id = c.reciveLong();
@@ -130,21 +147,21 @@ public class ServerImplTCP {
 
         private synchronized void closeConnections() {
 
-            if (c.socket != null){
+            if (c.socket != null) {
                 try {
                     c.socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            if (c.in!= null){
+            if (c.in != null) {
                 try {
                     c.in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            if (c.out != null){
+            if (c.out != null) {
                 try {
                     c.out.close();
                 } catch (IOException e) {

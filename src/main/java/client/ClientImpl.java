@@ -1,6 +1,6 @@
 package client;
 
-import communication.ClientCommunicator;
+import communication.ClientTextCommunicator;
 import communication.Method;
 import entities.Event;
 import entities.User;
@@ -10,20 +10,24 @@ import java.util.List;
 
 public class ClientImpl implements ClientAPI {
 
-    ClientCommunicator clientCommunicator;
+    ClientTextCommunicator c;
     User user;
 
     public ClientImpl() {
-        clientCommunicator = new ClientCommunicator("localhost", 3333);
+        System.out.println("Łaczenie z serverem");
+        c = new ClientTextCommunicator("localhost", 3333);
     }
 
     // rejestruje usera i zwraca potwierdzenie, jesli sie udało true
     @Override
     public boolean register(User user) {
-        System.out.println("REGISTERING USER");
-        if (clientCommunicator.sendMethodAndGetComfirmation(Method.REGISTER)) {
-            clientCommunicator.sendUser(user);
-            if (clientCommunicator.reviceComfirmation()) {
+
+        System.out.println("sending method and waiting for comfirmation");
+        if (c.sendMethodAndGetComfirmation(Method.REGISTER)) {
+            System.out.println("sending user");
+            c.sendUser(user);
+            System.out.println("reciving comfirmation");
+            if (c.reviceComfirmation()) {
                 System.out.println("USER REGISTRATION SUCCESS");
                 return true;
             } else {
@@ -38,11 +42,11 @@ public class ClientImpl implements ClientAPI {
     @Override
     public User login(String login, String pass) {
 
-        if (clientCommunicator.sendMethodAndGetComfirmation(Method.LOGIN)) {
+        if (c.sendMethodAndGetComfirmation(Method.LOGIN)) {
             System.out.println("+SENDING LOGIN AND PASS");
-            if (clientCommunicator.sendLoginInformations(login, pass)) {
+            if (c.sendLoginInformations(login, pass)) {
                 System.out.println("+LOGGIN AND PASSWORD SEND SUCCESS");
-                user = clientCommunicator.reciveUser();
+                user = c.reciveUser();
                 if (user == null) {
                     System.out.println("-LOGGING FAILED");
                     return null;
@@ -58,14 +62,14 @@ public class ClientImpl implements ClientAPI {
 
     @Override
     public boolean post(Event event) {
-        if (clientCommunicator.sendMethodAndGetComfirmation(Method.POST)) {
-            if (!clientCommunicator.reviceComfirmation()) {
+        if (c.sendMethodAndGetComfirmation(Method.POST)) {
+            if (!c.reviceComfirmation()) {
                 System.out.println("YOU ARE NOT LOGGED IN");
                 return false;
             }
-            clientCommunicator.sendEvent(event);
+            c.sendEvent(event);
 
-            if (clientCommunicator.reviceComfirmation()) {
+            if (c.reviceComfirmation()) {
                 System.out.println(event.getName() + " +ADDED SUCCESS");
                 return true;
             } else {
@@ -79,31 +83,31 @@ public class ClientImpl implements ClientAPI {
 
     @Override
     public Event get(long id) {
-        if (clientCommunicator.sendMethodAndGetComfirmation(Method.GET)) {
-            return clientCommunicator.reciveEvent(id);
+        if (c.sendMethodAndGetComfirmation(Method.GET)) {
+            return c.getEvent(id);
         }
         return null;
     }
 
     @Override
     public List<Event> getAll() {
-        if (clientCommunicator.sendMethodAndGetComfirmation(Method.GETALL)) {
-            return clientCommunicator.reciveEventList();
+        if (c.sendMethodAndGetComfirmation(Method.GETALL)) {
+            return c.reciveEventList();
         }
         return null;
     }
 
     @Override
     public void update(long id, Event newEvent) {
-        if (clientCommunicator.sendMethodAndGetComfirmation(Method.UPDATE)) {
-            clientCommunicator.update(id,newEvent);
+        if (c.sendMethodAndGetComfirmation(Method.UPDATE)) {
+            c.update(id,newEvent);
         }
     }
 
     @Override
     public boolean delete(long id) {
-        if (clientCommunicator.sendMethodAndGetComfirmation(Method.DELETE)) {
-            clientCommunicator.delete(id);
+        if (c.sendMethodAndGetComfirmation(Method.DELETE)) {
+            c.delete(id);
 
         }
         return false;

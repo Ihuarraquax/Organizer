@@ -22,9 +22,19 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(String name, EventType type, LocalDateTime startDate, LocalDateTime endDate, User author) {
+    public Event(Long id, String name, EventType type, String description, LocalDateTime startDate, LocalDateTime endDate, User author) {
+        this.id = id;
         this.name = name;
         this.startDate = startDate;
+        this.description = description;
+        this.endDate = endDate;
+        this.author = author;
+        this.type = type;
+    }
+    public Event(String name, EventType type, String description, LocalDateTime startDate, LocalDateTime endDate, User author) {
+        this.name = name;
+        this.startDate = startDate;
+        this.description = description;
         this.endDate = endDate;
         this.author = author;
         this.type = type;

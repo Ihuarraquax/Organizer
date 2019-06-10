@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
-public class ClientCommunicator {
+public class ClientCommunicator implements ClientCommunicatorAPI {
 
     Socket socket;
     ObjectOutputStream out;
@@ -26,6 +26,7 @@ public class ClientCommunicator {
         }
     }
 
+    @Override
     public boolean sendMethodAndGetComfirmation(Method method) {
         try {
             out.writeObject(method);
@@ -36,6 +37,12 @@ public class ClientCommunicator {
         return false;
     }
 
+    @Override
+    public void sendMethod(Method method) {
+
+    }
+
+    @Override
     public boolean reviceComfirmation() {
 
         try {
@@ -46,6 +53,7 @@ public class ClientCommunicator {
         return false;
     }
 
+    @Override
     public void sendUser(User user) {
         try {
             out.writeObject(user);
@@ -55,6 +63,7 @@ public class ClientCommunicator {
     }
 
 
+    @Override
     public boolean sendLoginInformations(String login, String pass) {
         try {
             out.writeObject(login);
@@ -68,6 +77,7 @@ public class ClientCommunicator {
         return false;
     }
 
+    @Override
     public User reciveUser() {
         try {
             User user = (User) in.readObject();
@@ -78,6 +88,7 @@ public class ClientCommunicator {
         return null;
     }
 
+    @Override
     public void sendEvent(Event event) {
         try {
             out.writeObject(event);
@@ -86,6 +97,7 @@ public class ClientCommunicator {
         }
     }
 
+    @Override
     public List<Event> reciveEventList() {
         try {
             return (List<Event>) in.readObject();
@@ -95,7 +107,14 @@ public class ClientCommunicator {
         return null;
     }
 
-    public Event reciveEvent(long id) {
+    @Override
+    public Event reciveEvent() {
+        return null;
+    }
+
+
+    @Override
+    public Event getEvent(long id) {
         try {
             out.writeObject(id);
             return (Event) in.readObject();
@@ -105,6 +124,7 @@ public class ClientCommunicator {
         return null;
     }
 
+    @Override
     public void update(long id, Event event) {
         try {
             out.writeObject(id);
@@ -115,6 +135,7 @@ public class ClientCommunicator {
 
     }
 
+    @Override
     public void delete(long id) {
         try {
             out.writeObject(id);

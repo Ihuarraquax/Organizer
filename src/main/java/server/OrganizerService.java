@@ -32,10 +32,13 @@ public class OrganizerService {
 
 
     public boolean saveEvent(Event event) {
+        System.out.println("checking if event is valid");
         if (eventIsValid(event)) {
+            System.out.println("event is valid");
             eventDao.save(event);
             return true;
         }
+        System.out.println("event is invalid");
         return false;
     }
 
@@ -63,11 +66,19 @@ public class OrganizerService {
     private boolean eventIsValid(Event event) {
         if (!hasEventConditions(event)) return false;
         long count = eventDao.getAll().stream().filter(e -> e.getName().equals(event.getName())).count();
+        if(count!=0) System.out.println("event exist in database");
         return count == 0;
     }
 
     private boolean hasEventConditions(Event e) {
-        if (e.getStartDate().isAfter(e.getEndDate())) return false;
+        System.out.println("checking event conditions");
+        System.out.println(e.getStartDate());
+        System.out.println(e.getEndDate());
+        if (e.getStartDate().isAfter(e.getEndDate())){
+            System.out.println("start date is after end date");
+            return false;
+        }
+        System.out.println("event condition are happy");
         return true;
         //todo
     }
