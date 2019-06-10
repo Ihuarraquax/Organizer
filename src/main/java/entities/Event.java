@@ -12,6 +12,7 @@ public class Event implements Serializable {
     private String name;
     private EventType type;
 
+    @Column(columnDefinition="TEXT")
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

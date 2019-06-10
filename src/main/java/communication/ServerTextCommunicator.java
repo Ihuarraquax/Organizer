@@ -107,6 +107,7 @@ public class ServerTextCommunicator implements ServerCommunicatorAPI {
     @Override
     public void sendUser(User user) {
         try {
+            out.writeUTF(String.valueOf(user.getId()));
             out.writeUTF(user.getLogin());
             out.writeUTF(user.getPassword());
             out.writeUTF(user.getEmail());

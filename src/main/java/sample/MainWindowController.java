@@ -40,6 +40,9 @@ public class MainWindowController implements Initializable {
     public TextField addEventEndDateTimeH;
     public Button deleteEventButton;
 
+    public CheckBox checkMeeting, checkCall, checkBusiness, checkFamily, checkParty, checkOnlyMine;
+    public Button filterButton;
+
 
     private ClientAPI clientFunctionality;
     private User user;
@@ -51,6 +54,7 @@ public class MainWindowController implements Initializable {
         user = LoginAndRegisterController.loggedUser;
         initEventTable();
         initLoggedUserLabel();
+
         initMiscellaneous();
     }
 
@@ -93,8 +97,7 @@ public class MainWindowController implements Initializable {
         for (Event event : selectedItems) {
             if (event.getAuthor().getId() == user.getId()) {
                 clientFunctionality.delete(event.getId());
-            }
-            else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("NIEPOWODZENIE");
                 alert.setHeaderText("Nie mozesz usunac cudzego wydarzenia");
@@ -106,13 +109,14 @@ public class MainWindowController implements Initializable {
 
 
     }
+
     private void refreshEventTable() {
         eventTable.getItems().setAll(getEvents());
     }
 
 
     private void initLoggedUserLabel() {
-        loggedUserLabel.setText(user.getFirstName()+" "+user.getLastName());
+        loggedUserLabel.setText(user.getFirstName() + " " + user.getLastName());
     }
 
 

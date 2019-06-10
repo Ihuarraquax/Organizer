@@ -31,6 +31,14 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.registerDate = LocalDateTime.now();
     }
+    public User(long id, String login, String password, String email, String firstName, String lastName) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     @Override
     public String toString() {

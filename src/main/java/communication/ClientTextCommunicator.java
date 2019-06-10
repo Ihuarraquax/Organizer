@@ -85,12 +85,13 @@ public class ClientTextCommunicator implements ClientCommunicatorAPI {
     @Override
     public User reciveUser() {
         try {
+            long id = Long.valueOf(in.readUTF());
             String login = in.readUTF();
             String password = in.readUTF();
             String email = in.readUTF();
             String firstName = in.readUTF();
             String lastName = in.readUTF();
-            User user = new User(login, password, email, firstName, lastName);
+            User user = new User(id, login, password, email, firstName, lastName);
             return user;
         } catch (IOException e) {
             e.printStackTrace();
