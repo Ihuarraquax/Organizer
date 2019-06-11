@@ -10,6 +10,9 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Klasa zapewniająca poprawność pobieranych oraz zapisywanych danych z DB i formatów, w których zwracane są wyniki
+ */
 
 public class OrganizerService {
 

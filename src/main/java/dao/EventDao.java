@@ -9,6 +9,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * DataAccessObject, CRUD do obiektów Event w bazie danych
+ */
+
 public class EventDao implements Dao<Event> {
 
     private EntityManager entityManager;

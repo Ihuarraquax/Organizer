@@ -1,5 +1,9 @@
 package communication;
 
+
+/**
+ * Enum zawierający komendy protokołu komunikacyjnego.
+ */
 public enum Method {
     LOGIN(0),REGISTER(1),POST(2),GET(3),GETALL(4),UPDATE(5),DELETE(6);
 
@@ -9,9 +13,6 @@ public enum Method {
         this.value = value;
     }
 
-    public int getValue() {
-        return this.value;
-    }
     public static Method getMethodFromValue(int value) {
         return Method.values()[value];
     }

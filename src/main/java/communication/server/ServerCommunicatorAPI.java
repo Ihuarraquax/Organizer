@@ -1,13 +1,18 @@
-package communication;
+package communication.server;
 
+import communication.Method;
 import entities.Event;
 import entities.User;
 
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Protokół używany
+ */
+
 public interface ServerCommunicatorAPI {
-    Method reciveMethod() throws IOException;
+    Method reciveMethod();
 
     Method reciveMethodAndSendComfirmation() throws IOException;
 

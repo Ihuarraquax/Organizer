@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="regis" prefHeight="200.0" prefWidth="191.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginAndRegisterController">
+<VBox fx:id="regis" prefHeight="200.0" prefWidth="191.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.LoginAndRegisterController">
    <children>
       <TextField fx:id="loginTextField" promptText="login" text="zabelko" />
       <PasswordField fx:id="passwordField" promptText="haseło" text="123123" />

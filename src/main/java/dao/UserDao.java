@@ -8,6 +8,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * DataAccessObject, CRUD do obiektów User w bazie danych
+ */
+
+
 public class UserDao implements Dao<User> {
 
     private EntityManager entityManager;

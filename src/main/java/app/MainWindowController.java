@@ -1,4 +1,4 @@
-package sample;
+package app;
 
 import client.ClientAPI;
 import client.ClientImplSingleton;

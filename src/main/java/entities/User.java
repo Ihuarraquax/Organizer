@@ -6,6 +6,10 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Obiekt mapowany relacyjnie w bazie danych z pomocą Hibernate.
+ */
+
 @Entity
 public class User implements Serializable {
 

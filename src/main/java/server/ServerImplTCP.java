@@ -1,7 +1,7 @@
 package server;
 
 import communication.Method;
-import communication.ServerTextCommunicator;
+import communication.server.ServerTextCommunicator;
 import entities.Event;
 import entities.User;
 
@@ -14,12 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ServerImplTCP {
 
-    ServerSocket serverSocket;
-    List<Thread> clientThreadList;
+/**
+ *  Tworzy sockety z łączącymi się klientami, przechowuje je w liście, dla każdego tworzy osobny wyjątek ClientThread
+ */
+class ServerImplTCP {
 
-    public ServerImplTCP() {
+    private ServerSocket serverSocket;
+    private List<Thread> clientThreadList;
+
+    ServerImplTCP() {
         clientThreadList = new ArrayList<>();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("organizer");
 
@@ -40,6 +44,10 @@ public class ServerImplTCP {
 
     }
 
+    /**
+     *  Wątek obsugujący rządania klientów
+     */
+
     public class ClientThread implements Runnable {
 
         ServerTextCommunicator c;
@@ -47,7 +55,14 @@ public class ServerImplTCP {
 
         OrganizerService organizerService;
 
-        public ClientThread(ServerTextCommunicator communicator, EntityManagerFactory entityManagerFactory) {
+
+        /**
+         *
+         * @param communicator
+         * @param entityManagerFactory
+         */
+
+        ClientThread(ServerTextCommunicator communicator, EntityManagerFactory entityManagerFactory) {
             this.c = communicator;
             this.organizerService = new OrganizerService(entityManagerFactory);
 
@@ -65,6 +80,9 @@ public class ServerImplTCP {
 
         }
 
+        /**
+         * Obsługuję rządania klienta.
+         */
         private void serve() {
             Method method;
             try {
@@ -145,6 +163,9 @@ public class ServerImplTCP {
             }
         }
 
+        /**
+         * Zamyka połączenia strumieni, socketow oraz usuwa się z listy aktywnych wątków
+         */
         private synchronized void closeConnections() {
 
             if (c.socket != null) {

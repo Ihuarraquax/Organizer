@@ -1,6 +1,6 @@
 package client;
 
-import communication.ClientTextCommunicator;
+import communication.client.ClientTextCommunicator;
 import communication.Method;
 import entities.Event;
 import entities.User;

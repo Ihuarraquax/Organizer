@@ -1,4 +1,4 @@
-package sample;
+package app;
 
 import client.ClientAPI;
 import client.ClientImplSingleton;
@@ -62,7 +62,7 @@ public class LoginAndRegisterController implements Initializable {
     private void openMainWindow() {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("mainView.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();

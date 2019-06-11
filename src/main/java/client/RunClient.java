@@ -1,4 +1,5 @@
-import client.ClientImpl;
+package client;
+
 import communication.Method;
 import entities.Event;
 import entities.EventType;

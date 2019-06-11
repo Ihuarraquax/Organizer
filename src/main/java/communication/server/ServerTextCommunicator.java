@@ -1,5 +1,6 @@
-package communication;
+package communication.server;
 
+import communication.Method;
 import entities.Event;
 import entities.EventType;
 import entities.User;
@@ -10,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Klasa opakowująca kommunikacje z klientem w zrozumiałe metody.
+ */
 public class ServerTextCommunicator implements ServerCommunicatorAPI {
 
     public Socket socket;
@@ -25,20 +29,6 @@ public class ServerTextCommunicator implements ServerCommunicatorAPI {
             e.printStackTrace();
         }
 
-    }
-
-    public void sendWelcomeMessage() {
-        try {
-            out.writeUTF("ORGANIZER PROTOCOL");
-            out.writeUTF("Dostępne komendy:");
-
-            for (int i = 0; i < Method.values().length; i++) {
-                out.writeUTF(Method.getMethodFromValue(i).name());
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

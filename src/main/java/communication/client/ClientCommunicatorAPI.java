@@ -1,5 +1,6 @@
-package communication;
+package communication.client;
 
+import communication.Method;
 import entities.Event;
 import entities.User;
 
