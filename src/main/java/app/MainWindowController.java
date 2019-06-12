@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+/**
+ *  Controller głównego okna aplikacji
+ */
 public class MainWindowController implements Initializable {
     @FXML
     public TableView<Event> eventTable;

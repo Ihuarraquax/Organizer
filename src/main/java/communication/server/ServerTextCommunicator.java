@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Klasa opakowująca kommunikacje z klientem w zrozumiałe metody.
+ * Używa strumienia DataInputStream i DataOutputStream, przekazuje i pobiera stringi w kodowaniu UTF
  */
 public class ServerTextCommunicator implements ServerCommunicatorAPI {
 
@@ -161,11 +162,6 @@ public class ServerTextCommunicator implements ServerCommunicatorAPI {
             e.printStackTrace();
         }
         return -1;
-    }
-
-    @Override
-    public boolean socketIsClosed() {
-        return false;
     }
 
     @Override

@@ -8,17 +8,20 @@ import entities.User;
 import java.util.List;
 
 
+/**
+ * Klasa nawiązująca połączenie z serverem i opakowująca komunikację protokołem w proste metody.
+ */
 public class ClientImpl implements ClientAPI {
 
     ClientTextCommunicator c;
     User user;
 
     public ClientImpl() {
-        System.out.println("Łaczenie z serverem");
-        c = new ClientTextCommunicator("localhost", 3333);
+        System.out.println("Laczenie z serverem");
+        c = new ClientTextCommunicator("localhost", 3334);
     }
 
-    // rejestruje usera i zwraca potwierdzenie, jesli sie udało true
+
     @Override
     public boolean register(User user) {
 

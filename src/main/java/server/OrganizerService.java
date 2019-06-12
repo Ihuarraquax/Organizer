@@ -24,6 +24,11 @@ public class OrganizerService {
         eventDao = new EventDao(entityManagerFactory);
     }
 
+    /**
+     * Walidacja użytkownika, sprawdza czy login znajduję się w bazie danych
+     * @param user
+     * @return true - user dodany do bazy, false - nie przeszedł walidacji
+     */
     public boolean registerUser(User user) {
 
         if (isLoginValid(user.getLogin())) {
@@ -33,7 +38,13 @@ public class OrganizerService {
         return false;
     }
 
-
+    /**
+     * Walidacja eventu, sprawdza warunki:
+     * - data startu jest wcześniejsza niz data zakończenia
+     * - nazwa nie jest zajęta
+     * @param event wydarzenie
+     * @return true - event dodany do bazy, false - nie przeszedł walidacji
+     */
     public boolean saveEvent(Event event) {
         System.out.println("checking if event is valid");
         if (eventIsValid(event)) {
@@ -49,15 +60,31 @@ public class OrganizerService {
         return eventDao.getAll();
     }
 
+    /**
+     * Sprawdza, czy w bazie istnieje user o podanym loginie i hasle
+     * @param login login
+     * @param pass hasło
+     * @return użytkownik o podanym loginie i haśle
+     */
     public User login(String login, String pass) {
         Optional<User> user = userDao.getAll().stream().filter(u -> u.getLogin().equals(login) && u.getPassword().equals(pass)).findFirst();
         return user.orElse(null);
     }
 
+    /**
+     *
+     * @param id identyfikator wydarzenia
+     * @return zwraca obiekt rządanego wydarzenia, w przypadku braku w bazie danych zwraca nulla;
+     */
     public Event getEvent(long id) {
         return eventDao.get(id).orElse(null);
     }
 
+    /**
+     * Uaktualnia wydarzenie
+     * @param event wydarzenie do uaktualnienia
+     * @param params tablica parametrów z wartościami do uaktualnienia. 0 - nazwa, 1 - data startu, 2 - data zakonczenia
+     */
     public void update(Event event, String[] params) {
         eventDao.update(event,params);
     }

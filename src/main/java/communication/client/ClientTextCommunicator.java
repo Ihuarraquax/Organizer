@@ -12,7 +12,9 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Klasa opakowująca kommunikacje z klienta z serverem w proste metody.
+ */
 public class ClientTextCommunicator implements ClientCommunicatorAPI {
 
 

@@ -7,10 +7,10 @@ import entities.User;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Protokół używany
- */
 
+/**
+ * API communicatora
+ */
 public interface ServerCommunicatorAPI {
     Method reciveMethod();
 
@@ -31,8 +31,6 @@ public interface ServerCommunicatorAPI {
     void sendEvent(Event event);
 
     long reciveLong();
-
-    boolean socketIsClosed();
 
     void sendEventSize(int size);
 }
